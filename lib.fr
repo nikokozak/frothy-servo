@@ -1,0 +1,23 @@
+-- servo: drive a hobby servo from Frothy over the PWM natives.
+--
+-- A standard hobby servo takes a 50 Hz signal (20 ms period). The pulse
+-- width sets the angle: about 500 us at one end, 2500 us at the other.
+-- On Frothy's PWM those pulse widths are duty values 250 and 1250 (out
+-- of the 0..10000 basis-point scale), since 500/20000 * 10000 = 250.
+--
+-- Servos vary. If yours does not reach both ends, or buzzes at the
+-- limits, calibrate with servo.pulse using raw microseconds instead of
+-- servo.write.
+
+-- Attach a servo on a pin. Returns a handle to pass to the other words.
+to servo.attach with pin [ pwm.open: pin, 50 ]
+
+-- Move to an angle from 0 to 180 degrees.
+to servo.write with servo, angle [ pwm.write: servo, map: angle, 0, 180, 250, 1250 ]
+
+-- Drive a raw pulse width in microseconds (calibration escape hatch).
+-- 1500 is the usual centre; widen past 500..2500 only if your servo can.
+to servo.pulse with servo, us [ pwm.write: servo, map: us, 0, 20000, 0, 10000 ]
+
+-- Release the pin. The servo stops holding its position.
+to servo.detach with servo [ pwm.close: servo ]
