@@ -1,3 +1,4 @@
 name    = "servo"
-version = "0.1.0"
-targets = ["host", "esp32_devkit_v1"]
+version = "0.1.1"
+boards  = ["host", "esp32_devkit_v1", "seeed_xiao_esp32c6", "seeed_xiao_esp32s3"]
+requires = ["pwm"]
